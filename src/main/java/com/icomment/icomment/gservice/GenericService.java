@@ -1,16 +1,16 @@
 package com.icomment.icomment.gservice;
 
-import java.util.List;
+import java.util.Collection;
 
 public interface GenericService <T,ID>{
 
 	T save (T entity) throws Exception;
 	
-	void saveAll (List<T> entity) throws Exception;
+	void saveAll (Collection<T> entity) throws Exception;
 	
 	int delete(ID id) throws Exception;
 	
 	T get(ID id) throws Exception;
 	
-	List<T> getAll() throws Exception;
+	Collection<T> getAll() throws Exception;
 }

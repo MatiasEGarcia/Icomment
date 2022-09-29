@@ -1,6 +1,6 @@
 package com.icomment.icomment.gservice;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Optional;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,7 +26,7 @@ public abstract class GenericServiceImpl<T,ID> implements GenericService<T, ID>{
 	
 	@Override
 	@Transactional
-	public void saveAll(List<T> entity) throws Exception {
+	public void saveAll(Collection<T> entity) throws Exception {
 		try {
 			getDao().saveAll(entity);
         } catch (DataAccessException e) {
@@ -78,7 +78,7 @@ public abstract class GenericServiceImpl<T,ID> implements GenericService<T, ID>{
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<T> getAll() throws Exception {
+	public Collection<T> getAll() throws Exception {
 		try {
 			return getDao().findAll();
         } catch (DataAccessException e) {
