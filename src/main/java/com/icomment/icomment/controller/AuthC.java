@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bezkoder.spring.login.payload.response.MessageResponse;
 import com.icomment.icomment.domain.User;
 import com.icomment.icomment.service.UserService;
 
@@ -19,7 +20,15 @@ public class AuthC {
 	private UserService userService;
 
 	
-	public ResponseEntity<?> registerUser(@RequestBody User user){
+	public ResponseEntity<?> registerUser(@RequestBody User user) throws Exception{
+		if(userService.existsByUsername(user.getUsername())) {
+			
+		}
+		if(userService.existsByEmail(user.getEmail())) {
+			
+		}
+		
+		
 		return null;
 	}
 	
