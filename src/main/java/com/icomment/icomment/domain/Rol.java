@@ -5,6 +5,8 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,6 +23,7 @@ public class Rol implements Serializable{
     @Column(name = "id_rol")
     private Long idRol;
 	
+	@Enumerated(EnumType.STRING)
 	@Column(name="name")
 	private ERol name;
 	
