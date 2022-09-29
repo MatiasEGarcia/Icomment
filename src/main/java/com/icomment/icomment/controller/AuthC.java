@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.icomment.icomment.domain.ERol;
 import com.icomment.icomment.domain.User;
+import com.icomment.icomment.payload.request.SignupRequest;
 import com.icomment.icomment.payload.response.MessageResponse;
 import com.icomment.icomment.service.UserService;
 
@@ -21,11 +23,11 @@ public class AuthC {
 	private UserService userService;
 
 	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@RequestBody User user) throws Exception{
-		if(userService.existsByUsername(user.getUsername())) {
+	public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest) throws Exception{
+		if(userService.existsByUsername(signupRequest.getUsername())) {
 			 return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
 		}
-		if(userService.existsByEmail(user.getEmail())) {
+		if(userService.existsByEmail(signupRequest.getEmail())) {
 			return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already taken!"));
 		}
 		userService.save(user);
