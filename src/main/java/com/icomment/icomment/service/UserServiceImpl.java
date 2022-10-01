@@ -57,9 +57,23 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements U
 
 
 	@Override
+	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		User user;
+        try {
+            user = userDao.findByUsername(username);
+        } catch (DataAccessException e) {
+            throw new UsernameNotFoundException("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UsernameNotFoundException("Unknown Error");
+        }
+
+        if (user == null) {
+            throw new UsernameNotFoundException(username);
+        }
+
+        return new UserDetailsImpl(user);
 	}
 
 }
