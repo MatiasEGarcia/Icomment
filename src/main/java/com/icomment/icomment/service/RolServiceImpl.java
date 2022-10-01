@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.icomment.icomment.dao.RolDao;
@@ -12,6 +13,7 @@ import com.icomment.icomment.domain.ERol;
 import com.icomment.icomment.domain.Rol;
 import com.icomment.icomment.gservice.GenericServiceImpl;
 
+@Service
 public class RolServiceImpl extends GenericServiceImpl<Rol, Long> implements RolService {
 
 	@Autowired

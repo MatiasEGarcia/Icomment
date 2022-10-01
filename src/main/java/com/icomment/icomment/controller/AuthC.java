@@ -1,5 +1,9 @@
 package com.icomment.icomment.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -9,18 +13,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.icomment.icomment.domain.ERol;
+import com.icomment.icomment.domain.Rol;
 import com.icomment.icomment.domain.User;
 import com.icomment.icomment.payload.request.SignupRequest;
 import com.icomment.icomment.payload.response.MessageResponse;
 import com.icomment.icomment.service.UserService;
+import com.icomment.icomment.service.RolService;
+import com.icomment.icomment.util.BCPasswordEncoder;
 
 @RestController
-@RequestMapping("/AuthC")
+@RequestMapping("/authC")
 @CrossOrigin("*")
 public class AuthC {
 	
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private RolService rolService;
+	
+	@Autowired
+	private BCPasswordEncoder bcPasswordEncoder;
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest) throws Exception{
@@ -30,6 +43,32 @@ public class AuthC {
 		if(userService.existsByEmail(signupRequest.getEmail())) {
 			return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already taken!"));
 		}
+		
+		List<String> setRoles = signupRequest.getRoles();
+		List<Rol> roles = new ArrayList<>();
+		User user = new User(signupRequest.getUsername(),
+				bcPasswordEncoder.passwordEncoder().encode(signupRequest.getPassword()), signupRequest.getEmail());
+
+		if (setRoles.isEmpty()) {
+			Optional<Rol> rol = Optional.ofNullable(rolService.findByName(ERol.ROLE_USER).orElseThrow(()-> new Exception("Rol user not found")));
+			roles.add(rol.get());
+		} else {
+			for(int i=0; i<setRoles.size();i++) {
+				switch (setRoles.get(i).toLowerCase()) {
+				case "user":
+					Optional<Rol> userRol = Optional.ofNullable(rolService.findByName(ERol.ROLE_USER).orElseThrow(()-> new Exception("Rol user not found")));
+					roles.add(userRol.get());
+					break;
+				case "admin":
+					Optional<Rol> adminRol = Optional.ofNullable(rolService.findByName(ERol.ROLE_ADMIN).orElseThrow(()-> new Exception("Rol admin not found")));
+					roles.add(adminRol.get());
+					break;
+				default:
+					throw new IllegalArgumentException("Unexpected value: " + setRoles.get(i).toLowerCase());
+				}
+			}
+		}
+		user.setRoles(roles);
 		userService.save(user);
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
