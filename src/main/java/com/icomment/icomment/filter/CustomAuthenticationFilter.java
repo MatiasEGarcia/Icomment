@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -18,6 +19,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.icomment.icomment.payload.request.LoginRequest;
 import com.icomment.icomment.service.UserDetailsImpl;
 
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
@@ -30,9 +33,15 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 	
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)throws AuthenticationException {
-		String username= request.getParameter("username");
-		String password = request.getParameter("password");
-		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username,password);
+		LoginRequest login;
+		
+		 try {
+			 login = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
+	        } catch (IOException e) {
+	            throw new AuthenticationServiceException(e.getMessage(), e);
+	        }
+		
+		UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(login.getUsername(),login.getPassword());
 		return authenticationManager.authenticate(auth);
 	}
 
