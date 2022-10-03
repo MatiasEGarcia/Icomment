@@ -39,12 +39,12 @@ public class CommentC {
 		}	
 	}
 	
-	@PostMapping(value="/save")
+	@PostMapping(value="/user/save")
 	public ResponseEntity<Comment> save(@RequestBody Comment comment) throws Exception{
 		return new ResponseEntity<Comment>(commentS.save(comment),HttpStatus.OK);
 	}
 	
-	@GetMapping(value= "/delete/{id}")
+	@GetMapping(value= "/user/delete/{id}")
 	public ResponseEntity<Long> deleteById(@PathVariable Long id) throws Exception{
 		if(commentS.delete(id) == 1) {  //if it is equal to 1 , it is because a comment was found and deleted
 			return new ResponseEntity<Long>(id,HttpStatus.OK);

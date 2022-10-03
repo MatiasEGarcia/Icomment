@@ -33,7 +33,12 @@ public class SecurityConfig {
 
 		http.cors().and().csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.authorizeRequests().antMatchers("/").permitAll();
+		http.authorizeRequests()
+		.antMatchers("/authC/**").permitAll()
+		.antMatchers("/commentC/admin/**").hasRole("ADMIN")
+		.antMatchers("/commentC/user/**").hasAnyRole("ADMIN","USER")
+		.antMatchers("/userC/admin/**").hasRole("ADMIN")
+		.anyRequest().authenticated();
 		http.apply(MyCustomDsl.customDsl());
 		return http.build();
 	}
