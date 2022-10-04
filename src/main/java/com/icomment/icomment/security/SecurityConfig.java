@@ -8,8 +8,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
+import com.icomment.icomment.filter.CustomAuthorizationFilter;
 import com.icomment.icomment.util.BCPasswordEncoder;
 
 
@@ -40,6 +41,7 @@ public class SecurityConfig {
 		.antMatchers("/userC/admin/**").hasRole("ADMIN")
 		.anyRequest().authenticated();
 		http.apply(MyCustomDsl.customDsl());
+		http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
 

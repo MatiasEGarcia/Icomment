@@ -28,6 +28,27 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements U
 
 	@Override
 	@Transactional(readOnly = true)
+	public User getByUsername(String username) throws Exception {
+		User user;
+        try {
+            user = userDao.findByUsername(username);
+        } catch (DataAccessException e) {
+            throw new UsernameNotFoundException("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UsernameNotFoundException("Unknown Error");
+        }
+
+        if (user == null) {
+            throw new UsernameNotFoundException(username);
+        }
+
+        return user;
+	}
+
+	
+	@Override
+	@Transactional(readOnly = true)
 	public Boolean existsByUsername(String username) throws Exception {
 		try {
 			return userDao.existsByUsername(username);
@@ -75,5 +96,9 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements U
 
         return new UserDetailsImpl(user);
 	}
+
+
+
+	
 
 }
