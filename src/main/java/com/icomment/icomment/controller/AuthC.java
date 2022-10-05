@@ -2,8 +2,10 @@ package com.icomment.icomment.controller;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icomment.icomment.domain.ERol;
 import com.icomment.icomment.domain.Rol;
@@ -85,12 +88,30 @@ public class AuthC {
 	
 	@GetMapping(value="/refreshToken")
 	public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws Exception {
-			String authorizationHeader= request.getHeader(AUTHORIZATION);
-			JwtUtils jwtUtils= new JwtUtils(authorizationHeader);
-			User user = userService.getByUsername(jwtUtils.getUsernameFromToken());
-			Map<String, String> tokens = jwtUtils.getRefreshToken(user.getUsername(), user.getRoles(), request.getRequestURL().toString());
-			response.setContentType(APPLICATION_JSON_VALUE);
-			new ObjectMapper().writeValue(response.getOutputStream(),tokens);
+		String authorizationHeader= request.getHeader(AUTHORIZATION);
+		if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+			try {
+				JwtUtils jwtUtils= new JwtUtils(authorizationHeader);
+				DecodedJWT decodedJWT= jwtUtils.getDecodedJwt();
+				User user = userService.getByUsername(decodedJWT.getSubject());
+				Map<String, String> tokens = jwtUtils.getRefreshToken(user.getUsername(), user.getRoles(), request.getRequestURL().toString());
+				response.setContentType(APPLICATION_JSON_VALUE);
+				new ObjectMapper().writeValue(response.getOutputStream(),tokens);
+			} catch (Exception e) {
+				response.setHeader("error", e.getMessage());
+				response.setStatus(FORBIDDEN.value());
+				Map<String, String> error = new HashMap<>();
+				error.put("error_message", e.getMessage());
+				response.setContentType(APPLICATION_JSON_VALUE);
+				new ObjectMapper().writeValue(response.getOutputStream(),error);
+			}
+			
+		}else {
+			throw new Exception("Refresh token missing");
+		}
+		
+			
+			
 	}
 	
 }

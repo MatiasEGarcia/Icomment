@@ -20,11 +20,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.icomment.icomment.security.jwt.JwtUtils;
 
 
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
@@ -38,10 +36,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 			String authorizationHeader= request.getHeader(AUTHORIZATION);
 			if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
 				try {
-					String token = authorizationHeader.substring("Bearer ".length());
-					Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
-					JWTVerifier verifier = JWT.require(algorithm).build();
-					DecodedJWT decodedJWT = verifier.verify(token);
+					JwtUtils jwtUtils = new JwtUtils(authorizationHeader);
+					DecodedJWT decodedJWT= jwtUtils.getDecodedJwt();
 					String username = decodedJWT.getSubject();
 					String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
 					Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();

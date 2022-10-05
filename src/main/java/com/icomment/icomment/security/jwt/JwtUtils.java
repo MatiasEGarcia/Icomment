@@ -25,13 +25,8 @@ public class JwtUtils {
 		
 	}
 	
-	public JwtUtils(String authorizationHeader) throws Exception { 
+	public JwtUtils(String authorizationHeader){ 
 		this.authorizationHeader = authorizationHeader;
-		if(authorizationHeader == null){
-			throw new Exception("Refresh token missing");
-		}else if (!authorizationHeader.startsWith(startsWith)) {
-			throw new Exception("Refresh token missing");
-		}
 	}
 	
 	public Map<String,String> getSuccessfulAuthTokens(UserDetailsImpl user, String issuer){
@@ -71,11 +66,10 @@ public class JwtUtils {
 		return tokens;
 	}
 	
-	public String getUsernameFromToken() {
+	public DecodedJWT getDecodedJwt() {
 		String token = authorizationHeader.substring(startsWith.length());
 		JWTVerifier verifier = JWT.require(algorithm).build();
-		DecodedJWT decodedJWT = verifier.verify(token);
-		return decodedJWT.getSubject();
+		return verifier.verify(token);
 	}
 	
 	
