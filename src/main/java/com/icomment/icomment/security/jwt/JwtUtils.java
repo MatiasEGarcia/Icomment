@@ -71,6 +71,4 @@ public class JwtUtils {
 		JWTVerifier verifier = JWT.require(algorithm).build();
 		return verifier.verify(token);
 	}
-	
-	
 }

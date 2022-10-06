@@ -5,4 +5,5 @@ import com.icomment.icomment.gservice.GenericService;
 
 public interface InvalidateTokenService extends GenericService<InvalidateToken, Long>{
 
+	Boolean existsBytoken(String token)throws Exception;
 }

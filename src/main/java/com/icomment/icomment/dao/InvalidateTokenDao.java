@@ -6,4 +6,5 @@ import com.icomment.icomment.domain.InvalidateToken;
 
 public interface InvalidateTokenDao extends JpaRepository<InvalidateToken, Long>{
 
+	Boolean existsByToken(String token);
 }

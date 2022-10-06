@@ -3,7 +3,9 @@ package com.icomment.icomment.service;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.icomment.icomment.dao.InvalidateTokenDao;
 import com.icomment.icomment.domain.InvalidateToken;
@@ -17,6 +19,20 @@ public class InvalidateTokenServiceImpl extends GenericServiceImpl<InvalidateTok
 	@Override
 	public JpaRepository<InvalidateToken, Long> getDao() {
 		return invalidateTokenDao;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public Boolean existsBytoken(String token) throws Exception {
+		try {
+			return invalidateTokenDao.existsByToken(token);
+        } catch (DataAccessException e) {
+        	e.printStackTrace();
+            throw new Exception("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unknown Error");
+        }
 	}
 
 
