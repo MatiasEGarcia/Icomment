@@ -5,6 +5,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +26,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icomment.icomment.domain.ERol;
+import com.icomment.icomment.domain.InvalidateToken;
 import com.icomment.icomment.domain.Rol;
 import com.icomment.icomment.domain.User;
+import com.icomment.icomment.payload.request.LogoutRequest;
 import com.icomment.icomment.payload.request.SignupRequest;
 import com.icomment.icomment.payload.response.MessageResponse;
 import com.icomment.icomment.security.jwt.JwtUtils;
 import com.icomment.icomment.service.UserService;
+import com.icomment.icomment.service.InvalidateTokenService;
 import com.icomment.icomment.service.RolService;
 import com.icomment.icomment.util.BCPasswordEncoder;
 
@@ -44,6 +48,9 @@ public class AuthC {
 	
 	@Autowired
 	private RolService rolService;
+	
+	@Autowired
+	private InvalidateTokenService invalidateTokenService;
 	
 	@Autowired
 	private BCPasswordEncoder bcPasswordEncoder;
@@ -113,5 +120,19 @@ public class AuthC {
 			
 			
 	}
+	
+	
+	@GetMapping(value="/logout")
+	public ResponseEntity<?> logout(@RequestBody LogoutRequest logoutRequest) throws Exception{
+		List<InvalidateToken> invTokens = new ArrayList<>();
+		Date currentDate = new Date();
+		invTokens.add(new InvalidateToken(logoutRequest.getAccessToken(),"accessToken", currentDate));
+		invTokens.add(new InvalidateToken(logoutRequest.getRefreshToken(), "refreshToken", currentDate));
+		
+		invalidateTokenService.saveAll(invTokens);
+		
+		return ResponseEntity.ok(new MessageResponse("User logout successfully!"));
+	}
+	
 	
 }

@@ -32,4 +32,65 @@ public class InvalidateToken implements Serializable{
 	@Temporal(value = TemporalType.TIMESTAMP)
 	@Column(name="invalidate_date")
     private Date invalidateDate;
+	
+	public InvalidateToken() {
+		super();
+	}
+
+	public InvalidateToken(String token, String type, Date invalidateDate) {
+		super();
+		this.token = token;
+		this.type = type;
+		this.invalidateDate = invalidateDate;
+	}
+
+	public InvalidateToken(Long idInvToken, String token, String type, Date invalidateDate) {
+		super();
+		this.idInvToken = idInvToken;
+		this.token = token;
+		this.type = type;
+		this.invalidateDate = invalidateDate;
+	}
+
+	public Long getIdInvToken() {
+		return idInvToken;
+	}
+
+	public void setIdInvToken(Long idInvToken) {
+		this.idInvToken = idInvToken;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public Date getInvalidateDate() {
+		return invalidateDate;
+	}
+
+	public void setInvalidateDate(Date invalidateDate) {
+		this.invalidateDate = invalidateDate;
+	}
+
+	@Override
+	public String toString() {
+		return "InvalidateToken [idInvToken=" + idInvToken + ", token=" + token + ", type=" + type + ", invalidateDate="
+				+ invalidateDate + "]";
+	}
+	
+	
+	
+	
 }
