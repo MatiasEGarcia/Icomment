@@ -1,16 +1,16 @@
 package com.icomment.icomment.service;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.icomment.icomment.dao.InvalidateTokenDao;
 import com.icomment.icomment.domain.InvalidateToken;
 import com.icomment.icomment.gservice.GenericServiceImpl;
 
+@Service
 public class InvalidateTokenServiceImpl extends GenericServiceImpl<InvalidateToken, Long> implements InvalidateTokenService{
 
 	@Autowired

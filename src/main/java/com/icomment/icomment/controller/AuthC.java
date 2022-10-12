@@ -97,28 +97,28 @@ public class AuthC {
 	public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String authorizationHeader= request.getHeader(AUTHORIZATION);
 		if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-			try {
-				JwtUtils jwtUtils= new JwtUtils(authorizationHeader);
-				DecodedJWT decodedJWT= jwtUtils.getDecodedJwt();
-				User user = userService.getByUsername(decodedJWT.getSubject());
-				Map<String, String> tokens = jwtUtils.getRefreshToken(user.getUsername(), user.getRoles(), request.getRequestURL().toString());
-				response.setContentType(APPLICATION_JSON_VALUE);
-				new ObjectMapper().writeValue(response.getOutputStream(),tokens);
-			} catch (Exception e) {
-				response.setHeader("error", e.getMessage());
-				response.setStatus(FORBIDDEN.value());
-				Map<String, String> error = new HashMap<>();
-				error.put("error_message", e.getMessage());
-				response.setContentType(APPLICATION_JSON_VALUE);
-				new ObjectMapper().writeValue(response.getOutputStream(),error);
+			if(!invalidateTokenService.existsBytoken(authorizationHeader.substring(JwtUtils.STARTS_WITH.length()))) {
+				try {
+					JwtUtils jwtUtils= new JwtUtils(authorizationHeader);
+					DecodedJWT decodedJWT= jwtUtils.getDecodedJwt();
+					User user = userService.getByUsername(decodedJWT.getSubject());
+					Map<String, String> tokens = jwtUtils.getRefreshToken(user.getUsername(), user.getRoles(), request.getRequestURL().toString());
+					response.setContentType(APPLICATION_JSON_VALUE);
+					new ObjectMapper().writeValue(response.getOutputStream(),tokens);
+				} catch (Exception e) {
+					response.setHeader("error", e.getMessage());
+					response.setStatus(FORBIDDEN.value());
+					Map<String, String> error = new HashMap<>();
+					error.put("error_message", e.getMessage());
+					response.setContentType(APPLICATION_JSON_VALUE);
+					new ObjectMapper().writeValue(response.getOutputStream(),error);
+				}
+			}else {
+				new ObjectMapper().writeValue(response.getOutputStream(),new MessageResponse("Refresh token was invalidated"));
 			}
-			
 		}else {
 			throw new Exception("Refresh token missing");
 		}
-		
-			
-			
 	}
 	
 	
@@ -126,6 +126,7 @@ public class AuthC {
 	public ResponseEntity<?> logout(@RequestBody LogoutRequest logoutRequest) throws Exception{
 		List<InvalidateToken> invTokens = new ArrayList<>();
 		Date currentDate = new Date();
+		//I save tokens wihtout starts_with
 		invTokens.add(new InvalidateToken(logoutRequest.getAccessToken(),"accessToken", currentDate));
 		invTokens.add(new InvalidateToken(logoutRequest.getRefreshToken(), "refreshToken", currentDate));
 		

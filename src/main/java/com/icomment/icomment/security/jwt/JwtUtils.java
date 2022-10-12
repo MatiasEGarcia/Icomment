@@ -17,7 +17,7 @@ import com.icomment.icomment.service.UserDetailsImpl;
 
 public class JwtUtils {
 	private String authorizationHeader;
-	private final String startsWith = "Bearer ";
+	public static final String STARTS_WITH= "Bearer ";
 	private final String algorithmKey = "secret";
 	private final Algorithm algorithm = Algorithm.HMAC256(algorithmKey.getBytes());
 	
@@ -52,7 +52,7 @@ public class JwtUtils {
 	
 	public Map<String,String> getRefreshToken(String username,List<Rol> roles,String issuer){
 		Map<String, String> tokens = new HashMap<>();
-		String refresToken = authorizationHeader.substring(startsWith.length());
+		String refresToken = authorizationHeader.substring(STARTS_WITH.length());
 		
 		String accessToken = JWT.create()
 				.withSubject(username)
@@ -67,7 +67,7 @@ public class JwtUtils {
 	}
 	
 	public DecodedJWT getDecodedJwt() {
-		String token = authorizationHeader.substring(startsWith.length());
+		String token = authorizationHeader.substring(STARTS_WITH.length());
 		JWTVerifier verifier = JWT.require(algorithm).build();
 		return verifier.verify(token);
 	}
