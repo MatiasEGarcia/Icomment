@@ -56,6 +56,20 @@ public abstract class GenericServiceImpl<T,ID> implements GenericService<T, ID>{
         }
 		return commentDeleted;
 	}
+	
+	@Override
+	@Transactional
+	public void deleteAll(Collection<T> entity) throws Exception {
+		try {
+			 getDao().deleteAll(entity);
+        } catch (DataAccessException e) {
+        	e.printStackTrace();
+            throw new Exception("Database Error");
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Unknown Error");
+        }
+	}
 
 	@Override
 	@Transactional(readOnly = true)

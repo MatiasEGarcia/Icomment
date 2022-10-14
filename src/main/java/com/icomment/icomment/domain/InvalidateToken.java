@@ -1,7 +1,7 @@
 package com.icomment.icomment.domain;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "invalidate_tokens", schema = "icomment")
@@ -29,28 +28,32 @@ public class InvalidateToken implements Serializable{
 	@Column(name="type")
     private String type;
 	
-	@Temporal(value = TemporalType.TIMESTAMP)
 	@Column(name="invalidate_date")
-    private Date invalidateDate;
+    private String invalidateDate;
+	
+	@Transient
+    private LocalDateTime invalidateLocalDateTime;
 	
 	public InvalidateToken() {
 		super();
 	}
 
-	public InvalidateToken(String token, String type, Date invalidateDate) {
+	public InvalidateToken(String token, String type, String invalidateDate) {
 		super();
 		this.token = token;
 		this.type = type;
 		this.invalidateDate = invalidateDate;
 	}
 
-	public InvalidateToken(Long idInvToken, String token, String type, Date invalidateDate) {
+	public InvalidateToken(Long idInvToken, String token, String type, String invalidateDate) {
 		super();
 		this.idInvToken = idInvToken;
 		this.token = token;
 		this.type = type;
 		this.invalidateDate = invalidateDate;
 	}
+	
+	
 
 	public Long getIdInvToken() {
 		return idInvToken;
@@ -76,12 +79,20 @@ public class InvalidateToken implements Serializable{
 		this.type = type;
 	}
 
-	public Date getInvalidateDate() {
+	public String getInvalidateDate() {
 		return invalidateDate;
 	}
 
-	public void setInvalidateDate(Date invalidateDate) {
+	public void setInvalidateDate(String invalidateDate) {
 		this.invalidateDate = invalidateDate;
+	}
+
+	public LocalDateTime getInvalidateLocalDateTime() {
+		return invalidateLocalDateTime;
+	}
+
+	public void setInvalidateLocalDateTime(LocalDateTime invalidateLocalDateTime) {
+		this.invalidateLocalDateTime = invalidateLocalDateTime;
 	}
 
 	@Override

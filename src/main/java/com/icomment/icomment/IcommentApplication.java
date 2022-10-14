@@ -9,16 +9,4 @@ public class IcommentApplication {
 		SpringApplication.run(IcommentApplication.class, args);
 
 	}
-	
-	/*
-	@Bean
-    public CommandLineRunner run(ApplicationContext appContext) {
-        return args -> {
-
-            String[] beans = appContext.getBeanDefinitionNames();
-            Arrays.stream(beans).sorted().forEach(System.out::println);
-
-        };
-    }*/
-
 }

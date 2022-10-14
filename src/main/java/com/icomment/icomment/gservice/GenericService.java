@@ -10,6 +10,8 @@ public interface GenericService <T,ID>{
 	
 	int delete(ID id) throws Exception;
 	
+	void deleteAll (Collection<T> entity) throws Exception;
+	
 	T get(ID id) throws Exception;
 	
 	Collection<T> getAll() throws Exception;

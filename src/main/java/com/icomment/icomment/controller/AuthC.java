@@ -5,7 +5,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +36,7 @@ import com.icomment.icomment.service.UserService;
 import com.icomment.icomment.service.InvalidateTokenService;
 import com.icomment.icomment.service.RolService;
 import com.icomment.icomment.util.BCPasswordEncoder;
+import com.icomment.icomment.util.LocalDateTimeUtil;
 
 @RestController
 @RequestMapping("/authC")
@@ -54,6 +54,9 @@ public class AuthC {
 	
 	@Autowired
 	private BCPasswordEncoder bcPasswordEncoder;
+	
+	@Autowired
+	private LocalDateTimeUtil localDateTimeUtil;
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest) throws Exception{
@@ -125,10 +128,10 @@ public class AuthC {
 	@GetMapping(value="/logout")
 	public ResponseEntity<?> logout(@RequestBody LogoutRequest logoutRequest) throws Exception{
 		List<InvalidateToken> invTokens = new ArrayList<>();
-		Date currentDate = new Date();
 		//I save tokens wihtout starts_with
-		invTokens.add(new InvalidateToken(logoutRequest.getAccessToken(),"accessToken", currentDate));
-		invTokens.add(new InvalidateToken(logoutRequest.getRefreshToken(), "refreshToken", currentDate));
+		String currentDateTime = localDateTimeUtil.getFormatCurrentMoment();
+		invTokens.add(new InvalidateToken(logoutRequest.getAccessToken(),"accessToken",currentDateTime));
+		invTokens.add(new InvalidateToken(logoutRequest.getRefreshToken(), "refreshToken", currentDateTime));
 		
 		invalidateTokenService.saveAll(invTokens);
 		
