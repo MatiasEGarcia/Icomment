@@ -33,10 +33,9 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements U
         try {
             user = userDao.findByUsername(username);
         } catch (DataAccessException e) {
-            throw new UsernameNotFoundException("Database Error");
+            throw new UsernameNotFoundException(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new UsernameNotFoundException("Unknown Error");
+            throw new UsernameNotFoundException(e.getMessage());
         }
 
         if (user == null) {
@@ -53,11 +52,9 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements U
 		try {
 			return userDao.existsByUsername(username);
         } catch (DataAccessException e) {
-        	e.printStackTrace();
-            throw new Exception("Database Error");
+            throw new Exception(e);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Unknown Error");
+            throw new Exception(e);
         }
 	}
 
@@ -68,11 +65,9 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements U
 		try {
 			return userDao.existsByEmail(email);
         } catch (DataAccessException e) {
-        	e.printStackTrace();
-            throw new Exception("Database Error");
+            throw new Exception(e);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Unknown Error");
+            throw new Exception(e);
         }
 	}
 
@@ -84,10 +79,10 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements U
         try {
             user = userDao.findByUsername(username);
         } catch (DataAccessException e) {
-            throw new UsernameNotFoundException("Database Error");
+            throw new UsernameNotFoundException(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            throw new UsernameNotFoundException("Unknown Error");
+            throw new UsernameNotFoundException(e.getMessage());
         }
 
         if (user == null) {

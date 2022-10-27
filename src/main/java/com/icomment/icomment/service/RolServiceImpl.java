@@ -30,11 +30,9 @@ public class RolServiceImpl extends GenericServiceImpl<Rol, Long> implements Rol
 		try {
 			return rolDao.findByName(name);
         } catch (DataAccessException e) {
-        	e.printStackTrace();
-            throw new Exception("Database Error");
+            throw new Exception(e);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Unknown Error");
+            throw new Exception(e);
         }
 	}
 }

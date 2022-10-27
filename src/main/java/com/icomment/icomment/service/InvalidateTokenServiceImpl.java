@@ -27,11 +27,9 @@ public class InvalidateTokenServiceImpl extends GenericServiceImpl<InvalidateTok
 		try {
 			return invalidateTokenDao.existsByToken(token);
         } catch (DataAccessException e) {
-        	e.printStackTrace();
-            throw new Exception("Database Error");
+            throw new Exception(e);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Unknown Error");
+            throw new Exception(e);
         }
 	}
 

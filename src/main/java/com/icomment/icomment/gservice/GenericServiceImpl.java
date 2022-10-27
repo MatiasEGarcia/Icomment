@@ -16,11 +16,9 @@ public abstract class GenericServiceImpl<T,ID> implements GenericService<T, ID>{
 		try {
 			return getDao().save(entity);
         } catch (DataAccessException e) {
-        	e.printStackTrace();
-            throw new Exception("Database Error");
+            throw new Exception(e);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Unknown Error");
+            throw new Exception(e);
         }
 	}
 	
@@ -30,11 +28,9 @@ public abstract class GenericServiceImpl<T,ID> implements GenericService<T, ID>{
 		try {
 			getDao().saveAll(entity);
         } catch (DataAccessException e) {
-        	e.printStackTrace();
-            throw new Exception("Database Error");
+            throw new Exception(e);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Unknown Error");
+            throw new Exception(e);
         }
 	}
 
@@ -48,11 +44,9 @@ public abstract class GenericServiceImpl<T,ID> implements GenericService<T, ID>{
 				commentDeleted = 1;
 			}
         } catch (DataAccessException e) {
-        	e.printStackTrace();
-            throw new Exception("Database Error");
+            throw new Exception(e);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Unknown Error");
+            throw new Exception(e);
         }
 		return commentDeleted;
 	}
@@ -63,11 +57,9 @@ public abstract class GenericServiceImpl<T,ID> implements GenericService<T, ID>{
 		try {
 			 getDao().deleteAll(entity);
         } catch (DataAccessException e) {
-        	e.printStackTrace();
-            throw new Exception("Database Error");
+            throw new Exception(e);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Unknown Error");
+            throw new Exception(e);
         }
 	}
 
@@ -78,11 +70,9 @@ public abstract class GenericServiceImpl<T,ID> implements GenericService<T, ID>{
 		try {
 			obj = getDao().findById(id);
         } catch (DataAccessException e) {
-        	e.printStackTrace();
-            throw new Exception("Database Error");
+            throw new Exception(e);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Unknown Error");
+            throw new Exception(e);
         }
 		if(obj.isPresent()) {
 			return obj.get();
@@ -96,11 +86,9 @@ public abstract class GenericServiceImpl<T,ID> implements GenericService<T, ID>{
 		try {
 			return getDao().findAll();
         } catch (DataAccessException e) {
-        	e.printStackTrace();
-            throw new Exception("Database Error");
+            throw new Exception(e);
         } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Unknown Error");
+            throw new Exception(e);
         }
 	}
 	//Those class than extends from this abstract class will edit this method with their repository
