@@ -63,11 +63,16 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.13.4</version><!--$NO-MVN-MAN-VER$-->
+			<version>2.13.4</version> <!--$NO-MVN-MAN-VER$-->
 		</dependency>
 	</dependencies>
 
 	<build>
+		<filters>
+			<filter>
+                C:\Users\matia\Desktop\Proyectos\Subidos a github\icomment\env.properties
+            </filter>
+		</filters>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
