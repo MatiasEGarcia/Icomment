@@ -13,6 +13,7 @@ public class MyCustomDsl extends AbstractHttpConfigurer<MyCustomDsl, HttpSecurit
         AuthenticationManager authenticationManager = http.getSharedObject(AuthenticationManager.class);
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManager);
         customAuthenticationFilter.setFilterProcessesUrl("/authC/login");
+        customAuthenticationFilter.setAuthenticationFailureHandler(new CustomAuthenticationFailureHandler());
         http.addFilter(customAuthenticationFilter);
     }
 
