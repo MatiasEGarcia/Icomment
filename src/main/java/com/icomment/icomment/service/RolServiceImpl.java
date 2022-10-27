@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.icomment.icomment.dao.RolDao;
 import com.icomment.icomment.domain.ERol;
 import com.icomment.icomment.domain.Rol;
+import com.icomment.icomment.exception.DaoException;
 import com.icomment.icomment.gservice.GenericServiceImpl;
 
 @Service
@@ -30,7 +31,7 @@ public class RolServiceImpl extends GenericServiceImpl<Rol, Long> implements Rol
 		try {
 			return rolDao.findByName(name);
         } catch (DataAccessException e) {
-            throw new Exception(e);
+            throw new DaoException(e);
         } catch (Exception e) {
             throw new Exception(e);
         }

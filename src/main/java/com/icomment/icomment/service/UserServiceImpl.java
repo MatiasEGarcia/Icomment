@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.icomment.icomment.dao.UserDao;
 import com.icomment.icomment.domain.User;
+import com.icomment.icomment.exception.DaoException;
 import com.icomment.icomment.gservice.GenericServiceImpl;
 
 @Service("userDetailsService")
@@ -52,7 +53,7 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements U
 		try {
 			return userDao.existsByUsername(username);
         } catch (DataAccessException e) {
-            throw new Exception(e);
+            throw new DaoException(e);
         } catch (Exception e) {
             throw new Exception(e);
         }
@@ -65,7 +66,7 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements U
 		try {
 			return userDao.existsByEmail(email);
         } catch (DataAccessException e) {
-            throw new Exception(e);
+            throw new DaoException(e);
         } catch (Exception e) {
             throw new Exception(e);
         }
@@ -81,7 +82,6 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements U
         } catch (DataAccessException e) {
             throw new UsernameNotFoundException(e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
             throw new UsernameNotFoundException(e.getMessage());
         }
 

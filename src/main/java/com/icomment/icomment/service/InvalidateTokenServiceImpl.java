@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.icomment.icomment.dao.InvalidateTokenDao;
 import com.icomment.icomment.domain.InvalidateToken;
+import com.icomment.icomment.exception.DaoException;
 import com.icomment.icomment.gservice.GenericServiceImpl;
 
 @Service
@@ -27,7 +28,7 @@ public class InvalidateTokenServiceImpl extends GenericServiceImpl<InvalidateTok
 		try {
 			return invalidateTokenDao.existsByToken(token);
         } catch (DataAccessException e) {
-            throw new Exception(e);
+            throw new DaoException(e);
         } catch (Exception e) {
             throw new Exception(e);
         }

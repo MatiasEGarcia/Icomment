@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.icomment.icomment.exception.DaoException;
+
 @Service
 public abstract class GenericServiceImpl<T,ID> implements GenericService<T, ID>{
 
@@ -16,7 +18,7 @@ public abstract class GenericServiceImpl<T,ID> implements GenericService<T, ID>{
 		try {
 			return getDao().save(entity);
         } catch (DataAccessException e) {
-            throw new Exception(e);
+            throw new DaoException(e);
         } catch (Exception e) {
             throw new Exception(e);
         }
@@ -28,7 +30,7 @@ public abstract class GenericServiceImpl<T,ID> implements GenericService<T, ID>{
 		try {
 			getDao().saveAll(entity);
         } catch (DataAccessException e) {
-            throw new Exception(e);
+            throw new DaoException(e);
         } catch (Exception e) {
             throw new Exception(e);
         }
@@ -44,7 +46,7 @@ public abstract class GenericServiceImpl<T,ID> implements GenericService<T, ID>{
 				commentDeleted = 1;
 			}
         } catch (DataAccessException e) {
-            throw new Exception(e);
+            throw new DaoException(e);
         } catch (Exception e) {
             throw new Exception(e);
         }
@@ -57,7 +59,7 @@ public abstract class GenericServiceImpl<T,ID> implements GenericService<T, ID>{
 		try {
 			 getDao().deleteAll(entity);
         } catch (DataAccessException e) {
-            throw new Exception(e);
+            throw new DaoException(e);
         } catch (Exception e) {
             throw new Exception(e);
         }
@@ -70,7 +72,7 @@ public abstract class GenericServiceImpl<T,ID> implements GenericService<T, ID>{
 		try {
 			obj = getDao().findById(id);
         } catch (DataAccessException e) {
-            throw new Exception(e);
+            throw new DaoException(e);
         } catch (Exception e) {
             throw new Exception(e);
         }
@@ -86,7 +88,7 @@ public abstract class GenericServiceImpl<T,ID> implements GenericService<T, ID>{
 		try {
 			return getDao().findAll();
         } catch (DataAccessException e) {
-            throw new Exception(e);
+            throw new DaoException(e);
         } catch (Exception e) {
             throw new Exception(e);
         }
